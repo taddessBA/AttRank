@@ -17,19 +17,24 @@ set scheme burd
 
 ***set home folder
 if "`c(username)'"=="trejo" {
-	glob dir "C:\Users\trejo\Dropbox (Princeton)\attractive_rank"
+	glob dir "C:\Users\trejo\Dropbox (Princeton)\attract_rank"
 	graph set window fontface "Calibri Light" 
+	
+	***set files path globals
+	global data "${dir}\data"
+	global syntax "`c(pwd)'"
+	global table "${dir}\tables"
+	global figure "${dir}\figures"
 }
 
-if "`c(username)'"=="" {}
-
-}
+if "`c(username)'"=="" {
 
 ***set files path globals
-global data "${dir}/data"
-global syntax "`c(pwd)'"
-global table "${dir}/tables"
-global figure "${dir}/figures"
+	global data "${dir}/data"
+	global syntax "`c(pwd)'"
+	global table "${dir}/tables"
+	global figure "${dir}/figures"
+}
 
 ***returns YYYY_MM_DD as global $date
 do "${syntax}/stata_date.do"
@@ -42,12 +47,12 @@ do "${syntax}/stata_date.do"
 global raw "${data}\wls_public_long_SCHCODE.dta"
 
 ***clean analytic sample
-global clean "${data}"
+global clean "${data}\"
 
 ***********************************************************************************
 *** RUN CODE
 ***********************************************************************************
-?
+
 ***import survey data
 do "${syntax}/A_fake.do"
 
