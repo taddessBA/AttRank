@@ -27,11 +27,20 @@ if "`c(username)'"=="trejo" {
 	global figure "${dir}\figures"
 }
 
-if "`c(username)'"=="" {
-
+if "`c(username)'"=="bezataddess" {
+ glob dir "/Users/bezataddess/Desktop/attractive"
 ***set files path globals
 	global data "${dir}/data"
-	global syntax "`c(pwd)'"
+	global syntax "/Users/bezataddess/Desktop/AttRank"
+	global table "${dir}/tables"
+	global figure "${dir}/figures"
+}
+
+if "`c(username)'"=="bt7304" {
+ glob dir "~/WLSProject"
+***set files path globals
+	global data "${dir}/data"
+	global syntax "~/WLSProject/AttRank"
 	global table "${dir}/tables"
 	global figure "${dir}/figures"
 }
