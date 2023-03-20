@@ -4,9 +4,13 @@ clear all
 
 **idpub + rytpe or familypub+personid uniquely identify (school id will be add)
 
-set varmax 16000
+set maxvar 16000, perm
 
-use /home/opr/data/dbgap/WLS/WLS_Survey_Phenotypic_Long-form_Data_13_06/wls_plg_13_06.dta
+use "/home/opr/data/dbgap/WLS/WLS_Survey_Phenotypic_Long-form_Data_13_06/wls_plg_13_06.dta",clear
+
+** merge with the school id dataset 
+
+merge 1:1 idpriv rtype using "/home/opr/data/dbgap/WLS/WLS_new/schcode_rlg.dta"
 
 **personal id
 
@@ -323,31 +327,16 @@ recode enjoy (-3=.)(-29=.)(-27=.)
 egen well_being= rowmax (happy enjoy)
 
 ******attractive*** 
-
 tab meanrat
 gen ratmean=meanrat
 recode ratmean (.=.)
 
-
-********************************************
-****these varibles are not in teh dataset****
-*********************************************
-** number of months between first marriage and birth of the first child
-
-gen firstm_c =durmeb
-recode firstm_c (.=.)
-
-** how often contact with (first and second) high school friend 
-
-gen contact =hmx47rer
-recode contact (.=.)
+**raw (mean for every individual i)
+egen mean_raw_score=rowmean(rawscore1 rawscore2  rawscore3 rawscore4 rawscore5 rawscore6 rawscore7  rawscore8 rawscore9 rawscore10 rawscore11 rawscore12)
  
-**married or lived with someone who was a problem drinker 
-
-gen lived_driker =gu038re 
-recode lived_driker (.=.)
-*******************************************
-
-
-
-  
+list rtype mean_raw_score 
+ 
+***school code 
+tab schcode
+gen school=schcode
+recode school (.=.)  
