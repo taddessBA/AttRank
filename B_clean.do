@@ -1,31 +1,14 @@
-***clean survey data
 
-clear all
+use "${data}\wls_public_long_SCHCODE.dta", clear
 
-**idpub + rytpe or familypub+personid uniquely identify (school id will be add)
+***************************************************************************
+* CLEAN WLS DATA 
+***************************************************************************
 
-set maxvar 16000, perm
-
-use "/home/opr/data/dbgap/WLS/WLS_Survey_Phenotypic_Long-form_Data_13_06/wls_plg_13_06.dta",clear
-
-** merge with the school id dataset 
-
-merge 1:1 idpriv rtype using "/home/opr/data/dbgap/WLS/WLS_new/schcode_rlg.dta"
-
-**personal id
-
-gen famid = "familypriv"
-
-gen person = personid
-
-egen id = concat(famid person), format(%8.0f)
-
-**droping sibilings 
-
+**drop siblings 
 drop if rtype== "s"
 
 *** sex
-
 gen female = z_sexrsp
 recode female (1=0) (2=1)
 label define female_label 0 "Male" 1 "Female"
@@ -33,7 +16,6 @@ label values female female_label
 
 **birthdate
 gen birthdate = z_brdxdy
-
 
 **anthopometric**
 
@@ -305,7 +287,6 @@ replace risk=0 if z_jstk02re ==2| z_jstk03re ==2| z_jstk04re==2| z_jstk05re==2| 
 
 
 **subjective well-being
-
 gen happy_92=z_mu006rer
 recode happy_92 (.=.)
 gen happy_03=z_iu006rer
@@ -326,17 +307,47 @@ recode enjoy (-3=.)(-29=.)(-27=.)
 
 egen well_being= rowmax (happy enjoy)
 
+
+***************************************************************************
+* ATTRACTIVENESS VARIABLES
+***************************************************************************
+
 ******attractive*** 
 tab meanrat
 gen ratmean=meanrat
 recode ratmean (.=.)
 
 **raw (mean for every individual i)
-egen mean_raw_score=rowmean(rawscore1 rawscore2  rawscore3 rawscore4 rawscore5 rawscore6 rawscore7  rawscore8 rawscore9 rawscore10 rawscore11 rawscore12)
- 
+egen mean_raw_score=rowmean(rawscore1 rawscore2  rawscore3 ///
+							rawscore4 rawscore5 rawscore6 ///
+							rawscore7 rawscore8 rawscore9 ///
+							rawscore10  rawscore11  rawscore12) 
 list rtype mean_raw_score 
  
 ***school code 
 tab schcode
 gen school=schcode
 recode school (.=.)  
+
+center mean_raw_score, inplace standardize
+
+egen absolute_rank = rank(mean_raw_score), by(school)
+
+**calculate the number of students in each school
+sort school absolute_rank
+
+egen n_s = count(absolute_rank), by(school) 
+
+*egen n_s=count(rtype=="g"), by(school)
+
+**initialize percentile_rank_is variable
+gen percentile_rank_is = .
+ 
+**calculate 
+by school: gen rank_is = cond(absolute_rank == 1, 0, (absolute_rank - 1)/(n_s - 1)) 
+
+***************************************************************************
+* CLEAN WLS DATA 
+***************************************************************************
+
+save "${data}\wls_clean_${date}.dta", replace
