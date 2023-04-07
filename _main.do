@@ -29,12 +29,12 @@ if "`c(username)'"=="trejo" {
 }
 
 if "`c(username)'"=="bezataddess" {
- glob dir "/Users/bezataddess/Desktop/attractive"
+ glob dir "/Users/bezataddess/Desktop"
 ***set files path globals
-	global data "${dir}/data"
-	global syntax "`c(pwd)'"
-	global table "${dir}/tables"
-	global figure "${dir}/figures"
+	global data "${dir}/attractive/data"
+	global syntax "${dir}/AttRank"
+	global table "${dir}/attractive/tables"
+	global figure "${dir}/attractive/figures"
 }
 
 if "`c(username)'"=="bt7304" {
@@ -114,7 +114,7 @@ dis "$date"
 ***********************************************************************************
 
 ***clean analytic sample
-global clean "${data}\wls_clean_2023_03_29.dta"
+global clean "${data}\wls_clean_${date}.dta"
 
 ***********************************************************************************
 *** RUN CODE

@@ -6,7 +6,7 @@
 if "`c(username)'"!="bt7304" {
 	
 	***load wls long [each row is a person]
-	use "${data}\wls_public_long.dta", clear
+	use "${data}/wls_public_long.dta", clear
 
 	***generate random number and percentile
 	generate random = round(rnormal(), .1)
