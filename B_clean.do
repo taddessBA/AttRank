@@ -17,6 +17,51 @@ label values female female_label
 **birthdate
 gen birthdate = z_brdxdy
 
+**childhood SES
+gen chhoodSES=bmpin1
+recode chhoodSES (.=.)
+label variable chhoodSES "Childhood SES: Parent's income in 1957"
+
+**parental Education 
+gen maeduc=bmmaedu 
+recode maeduc (-3=.) (-1=.)
+label variable maeduc "Mother's education in 1957"
+
+gen paeduc=bmfaedu
+recode paeduc (-3=.) (-1=.)
+label variable paeduc "Father's education in 1957"
+
+gen headeduc =bmhhed
+recode headeduc (-3=.) (-1=.)
+label variable headeduc "The head of household's education in 1957"
+
+**Parental occupation 
+gen mawork=wrmo57
+recode mawork (-3=.) (-1=.) (-2=.)
+label define mawork_label 1 "Yes" 0 "No"
+label values mawork mawork_label
+
+gen headwork=bkhhw5
+recode headwork (-3=.) (-1=.) (-2=.)
+label define headwork_label 1 "Yes"  0 "No"
+label values headwork headwork_label
+
+gen paocc=ocf57
+
+** Family yearly income in 1957
+gen faminc57=ytmi57
+recode faminc57 (-3=.) (-1=.) 
+
+**Residence in 1957
+gen lived=res57
+
+**lived in Milwaukee or not 
+gen milwaukee= res57
+recode milwaukee (8=1) (1/7=0)
+label define milwaukee_label 1 "Yes" 0 "No"
+label values milwaukee milwaukee_label
+
+
 **anthopometric**
 
 **bmi for graduate 
@@ -28,15 +73,15 @@ recode bmi_03 (.=.)(-4=.) (-3.5=.) (-3=.) (-2.5=.) (-2.3333333=.) (-2=.)
 gen bmi_11=z_jx011rec
 recode bmi_11 (.=.)(-4=.) (-3.5=.) (-3=.) (-2.5=.) (-2.3333333=.) (-2=.)
 
-** need to combine school id 
-
 egen bmi= rowmean(bmi_92 bmi_03 bmi_11 )
 recode bmi (.=.)(-4=.)
+label variable bmi "Body Mass Index"
 
 **height in mm
 
 gen height =0.0254*z_ix010rec
 recode height (.=.) ( -.0508=.) ( -.1016=.)
+label variable height "Height (mm)"
 
 **cognition and education**
 

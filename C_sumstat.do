@@ -1,6 +1,10 @@
 
 use "${clean}", clear
 
+
+**globlas for controls for childhood vars 
+
+
 ***create common (nonmissing) sample
 mark nomiss
 markout nomiss id female birthdate bmi height cognitive educ afirstbirth num_marrige afirstmarrige num_childfirstm num_childlastm alcohol cig smoker_ever dep drinks pa self_health family_sat f_sat job_sat life_sat lone risk happy enjoy well_being ratmean
